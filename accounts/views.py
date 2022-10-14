@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model
 from .forms import CustomUserCreationForm, CustomUserChangeForm
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm
 from django.contrib.auth import login as login_
 from django.contrib.auth import logout as logout_
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 
 # Create your views here.
@@ -20,7 +21,8 @@ def signup(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login_(request, user)
             return redirect("accounts:index")
     else:
         form = CustomUserCreationForm()
@@ -35,7 +37,7 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login_(request, form.get_user())
-            return redirect(request.GET.get("next") or "accounts:index")
+            return redirect(request.GET.get("next") or "articles:index")
     else:
         form = AuthenticationForm()
     context = {
@@ -44,7 +46,6 @@ def login(request):
     return render(request, "accounts/login.html", context)
 
 
-@login_required
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
     context = {
@@ -72,5 +73,28 @@ def update(request, pk):
 
 @login_required
 def logout(request):
+    logout_(request)
+    return redirect("articles:index")
+
+
+@login_required
+def change_pw(request):
+    user = request.user
+    if request.method == "POST":
+        form = PasswordChangeForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            return redirect("accounts:index")
+    else:
+        form = PasswordChangeForm(user)
+    context = {
+        "form": form,
+    }
+    return render(request, "accounts/change-pw.html", context)
+
+
+def delete(request):
+    request.user.delete()
     logout_(request)
     return redirect("accounts:index")
