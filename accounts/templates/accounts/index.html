@@ -4,7 +4,7 @@
 
 <div class="container">
   {% for user in users_ %}
-  <p>{{ user.username }}</p>
+  <a href="{% url 'accounts:detail' user.pk %}"><p>{{ user.username }}</p></a>
   {% endfor %}
   <a href="{% url 'accounts:signup' %}" class="btn btn-primary">즉시 가입</a>
   <a href="{% url 'accounts:login' %}" class="btn btn-primary">로그인</a>
