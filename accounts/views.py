@@ -13,7 +13,7 @@ def index(request):
     context = {
         "users_": users_,
     }
-    return render(request, "accounts/users.html", context)
+    return render(request, "accounts/index.html", context)
 
 
 def signup(request):
@@ -21,7 +21,7 @@ def signup(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect("accounts:users")
+            return redirect("accounts:index")
     else:
         form = CustomUserCreationForm()
     context = {
@@ -34,7 +34,7 @@ def login(request):
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login_(request, form.get_user())
-            return redirect(request.GET.get('next') or 'accounts:users')
+            return redirect(request.GET.get('next') or 'accounts:index')
     else:
         form = AuthenticationForm()
     context = {'form' : form}
