@@ -44,6 +44,7 @@ def login(request):
     return render(request, "accounts/login.html", context)
 
 
+@login_required
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
     context = {
@@ -52,6 +53,7 @@ def detail(request, pk):
     return render(request, "accounts/detail.html", context)
 
 
+@login_required
 def update(request, pk):
     user = get_user_model().objects.get(id=pk)
     if request.method == "POST":
@@ -66,3 +68,9 @@ def update(request, pk):
         "user": user,
     }
     return render(request, "accounts/update.html", context)
+
+
+@login_required
+def logout(request):
+    logout_(request)
+    return redirect("accounts:index")
