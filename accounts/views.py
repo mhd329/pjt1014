@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-def users(request):
+def index(request):
     users_ = get_user_model().objects.order_by("-pk")
     context = {
         "users_": users_,
