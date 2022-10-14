@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  {% for user in users_ %}
+  <p>{{ user.username }}</p>
+  {% endfor %}
+  <a href="{% url 'accounts:signup' %}" class="btn btn-primary">즉시 가입</a>
+</div>
+
+{% endblock content %}
