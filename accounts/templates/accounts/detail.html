@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+  <p>{{ user.username }}</p>
+  <p>{{ user.email }}</p>
+  <p>{{ user.date_joined }}</p>
+  <a href="{% url 'accounts:index' %}" class="btn btn-primary">돌아가기</a>
+</div>
+
+{% endblock content %}
