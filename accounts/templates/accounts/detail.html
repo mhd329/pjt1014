@@ -4,9 +4,12 @@
 
 <div class="container">
   <p>{{ user.username }}</p>
+  <p>{{ user.full_name }}</p>
   <p>{{ user.email }}</p>
   <p>{{ user.date_joined }}</p>
+  <a href="{% url 'accounts:update' user.pk %}" class="btn btn-primary">회원정보 수정</a>
   <a href="{% url 'accounts:index' %}" class="btn btn-primary">돌아가기</a>
+
 </div>
 
 {% endblock content %}

@@ -29,18 +29,40 @@ def signup(request):
     }
     return render(request, "accounts/signup.html", context)
 
+
 def login(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login_(request, form.get_user())
-            return redirect(request.GET.get('next') or 'accounts:index')
+            return redirect(request.GET.get("next") or "accounts:index")
     else:
         form = AuthenticationForm()
-    context = {'form' : form}
-    return render(request, 'accounts/login.html', context)
+    context = {
+        "form": form,
+    }
+    return render(request, "accounts/login.html", context)
+
 
 def detail(request, pk):
     user = get_user_model().objects.get(pk=pk)
-    context = {'user': user}
-    return render(request, 'accounts/detail.html', context)
+    context = {
+        "user": user,
+    }
+    return render(request, "accounts/detail.html", context)
+
+
+def update(request, pk):
+    user = get_user_model().objects.get(id=pk)
+    if request.method == "POST":
+        form = CustomUserChangeForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect("accounts:detail", user.id)
+    else:
+        form = CustomUserChangeForm(instance=user)
+    context = {
+        "form": form,
+        "user": user,
+    }
+    return render(request, "accounts/update.html", context)
