@@ -10,4 +10,10 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomUserChangeForm(UserChangeForm):
-    pass
+    class Meta:
+        model = get_user_model()
+        fields = (
+            "last_name",
+            "first_name",
+            "email",
+        )
